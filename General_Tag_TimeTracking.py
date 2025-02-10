@@ -17,38 +17,42 @@ ASSIGNEES = "49211404,56674259,81808051,81800109,81747238,7342900,44580634,81655
 
 # ✅ Specific Client Tags to Include
 SPECIFIC_TAGS = {
-            "dev01: software development - backend", "dev02: software development - frontend",
-            "dev03: mobile app development",
-            "dev04: product design", "dev05: qa testing and bug fixing", "dev06: research and development (r&d)",
-            "dev07: devops and infrastructure management", "dev08: code review and documentation",
-            "pm01: project planning",
-            "pm02: task allocation and tracking", "pm03: client meetings and communication",
-            "pm04: internal team meetings",
-            "pm05: risk assessment and mitigation", "pm06: solution design", "pm07: configuration",
-            "pm08: factory acceptance testing",
-            "pm09: user acceptance testing", "pm10: client training", "pm11: commissioning support",
-            "pm12: integrations configuration",
-            "sm01: sales prospecting", "sm02: marketing campaign management", "sm03: social media strategy",
-            "sm04: content creation",
-            "sm05: customer relationship management (crm)", "sm06: bd introduction meeting",
-            "sup01: customer support - tickets",
-            "sup02: customer support - calls/emails", "sup03: maintenance and updates",
-            "sup04: troubleshooting and bug fixes",
-            "sup05: external training", "tr01: employee onboarding", "tr02: team training", "tr03: skills development",
-            "tr04: tool and process familiarisation", "ops01: general administration",
-            "ops02: financial and budgeting tasks",
-            "ops03: legal and compliance", "ops04: office management", "proj01: [project name] development",
-            "proj02: [project name] testing", "proj03: [project name] deployment",
-            "proj04: [project name] client feedback implementation",
-            "hr01: recruitment and interviews", "hr02: employee engagement", "hr03: policy development",
-            "hr04: payroll and benefits administration", "meet01: weekly team meetings", "meet02: leadership meetings",
-            "meet03: cross-departmental collaboration", "meet04: brainstorming sessions", "nonb01: leave and vacation",
-            "nonb02: sick leave", "nonb03: internal process improvement", "nonb04: miscellaneous admin tasks",
-            "de01: integrations", "de02: platform and tools", "de03: workflow automation",
-            "de04: testing & integration fixing",
-            "de05: design & architecture", "de06: data science, ml & ai", "de07: research and development (r&d)",
-            "de08: code review & documentation"
-        }
+    "dev01: software development - backend", "dev02: software development - frontend",
+    "dev03: mobile app development",
+    "dev04: product design", "dev05: qa testing and bug fixing", "dev06: research and development (r&d)",
+    "dev07: devops and infrastructure management", "dev08: code review and documentation",
+    "pm01: project planning",
+    "pm02: task allocation and tracking", "pm03: client meetings and communication",
+    "pm04: internal team meetings",
+    "pm05: risk assessment and mitigation", "pm06: solution design", "pm07: configuration",
+    "pm08: factory acceptance testing",
+    "pm09: user acceptance testing", "pm10: client training", "pm11: commissioning support",
+    "pm12: integrations configuration",
+    "sm01: sales prospecting", "sm02: marketing campaign management", "sm03: social media strategy",
+    "sm04: content creation",
+    "sm05: customer relationship management (crm)", "sm06: bd introduction meeting",
+    "sup01: customer support - tickets",
+    "sup02: customer support - calls/emails", "sup03: maintenance and updates",
+    "sup04: troubleshooting and bug fixes",
+    "sup05: external training", "tr01: employee onboarding", "tr02: team training", "tr03: skills development",
+    "tr04: tool and process familiarisation", "ops01: general administration",
+    "ops02: financial and budgeting tasks",
+    "ops03: legal and compliance", "ops04: office management", "proj01: [project name] development",
+    "proj02: [project name] testing", "proj03: [project name] deployment",
+    "proj04: [project name] client feedback implementation",
+    "hr01: recruitment and interviews", "hr02: employee engagement", "hr03: policy development",
+    "hr04: payroll and benefits administration", "meet01: weekly team meetings", "meet02: leadership meetings",
+    "meet03: cross-departmental collaboration", "meet04: brainstorming sessions", "nonb01: leave and vacation",
+    "nonb02: sick leave", "nonb03: internal process improvement", "nonb04: miscellaneous admin tasks",
+    "de01: integrations", "de02: platform and tools", "de03: workflow automation",
+    "de04: testing & integration fixing",
+    "de05: design & architecture", "de06: data science, ml & ai", "de07: research and development (r&d)",
+    "de08: code review & documentation", "BD01: Marketing Campaign Management", "BD02: Sales Prospecting",
+    "BD03: Social Media / Content Creation", "BD04: Customer Relationship Management (CRM)",
+    "BD05: Proposal and RFP Preparation",
+    "BD06: BD Introduction / Demo"
+
+}
 
 # ✅ Sidebar for Date Selection
 st.sidebar.header("📅 Select Date Range")
@@ -58,6 +62,7 @@ end_date = st.sidebar.date_input("End Date", datetime(2025, 1, 31))
 # ✅ Convert selected dates to Unix timestamps
 START_DATE = int(datetime.combine(start_date, datetime.min.time()).replace(tzinfo=timezone.utc).timestamp() * 1000)
 END_DATE = int(datetime.combine(end_date, datetime.max.time()).replace(tzinfo=timezone.utc).timestamp() * 1000)
+
 
 # ✅ Function to Fetch Data (No Caching)
 def fetch_clickup_data(start_date, end_date):
@@ -74,6 +79,7 @@ def fetch_clickup_data(start_date, end_date):
     else:
         st.error(f"❌ API Error: {response.json()}")
         return []
+
 
 # ✅ Add Refresh Button
 if st.sidebar.button("🔄 Refresh Data"):
@@ -136,7 +142,7 @@ if data:
     summary_df["% Billable"] = (summary_df.get("Billable", 0) / summary_df["Total Hours"]) * 100
     summary_df = summary_df.reset_index().rename(
         columns={"TagName": "Client Tag", "Non-Billable": "Non Billable", "Billable": "Billable",
-                     "Total Hours": "Total Hours", "% Billable": "Percentage Billable"})
+                 "Total Hours": "Total Hours", "% Billable": "Percentage Billable"})
 
     # ✅ Display Summary Table at the Top
     st.write("### 🏆 Time Tracking Summary")
@@ -174,5 +180,4 @@ if data:
         st.plotly_chart(fig_stacked)
 
 else:
- st.warning("⚠️ No time tracking data available for the selected period.")
-
+    st.warning("⚠️ No time tracking data available for the selected period.")
